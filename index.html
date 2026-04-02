@@ -1,0 +1,2230 @@
+<!doctype html>
+<html lang="id">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>UndangKita - Pembuat Undangan Digital Modern</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
+    <link
+      href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;600;700&family=Poppins:wght@300;400;500;600&family=Great+Vibes&family=Cormorant+Garamond:wght@400;600&family=Montserrat:wght@300;400;600&display=swap"
+      rel="stylesheet"
+    />
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"
+    />
+    <style>
+      * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+      }
+
+      :root {
+        --primary: #6366f1;
+        --primary-dark: #4f46e5;
+        --secondary: #ec4899;
+        --accent: #f59e0b;
+        --dark: #1e1b4b;
+        --light: #f8fafc;
+        --gradient-1: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        --gradient-2: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
+        --gradient-3: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%);
+        --gradient-4: linear-gradient(135deg, #43e97b 0%, #38f9d7 100%);
+      }
+
+      html {
+        scroll-behavior: smooth;
+      }
+
+      body {
+        font-family: "Poppins", sans-serif;
+        background: var(--light);
+        color: var(--dark);
+        overflow-x: hidden;
+      }
+
+      /* Navigation */
+      nav {
+        position: fixed;
+        top: 0;
+        width: 100%;
+        background: rgba(255, 255, 255, 0.95);
+        backdrop-filter: blur(10px);
+        z-index: 1000;
+        padding: 1rem 5%;
+        box-shadow: 0 2px 20px rgba(0, 0, 0, 0.1);
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+      }
+
+      .logo {
+        font-size: 1.8rem;
+        font-weight: 700;
+        background: var(--gradient-1);
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+        display: flex;
+        align-items: center;
+        gap: 0.5rem;
+        cursor: pointer;
+      }
+
+      .nav-links {
+        display: flex;
+        gap: 2rem;
+        list-style: none;
+      }
+
+      .nav-links a {
+        text-decoration: none;
+        color: var(--dark);
+        font-weight: 500;
+        transition: color 0.3s;
+        position: relative;
+        cursor: pointer;
+      }
+
+      .nav-links a::after {
+        content: "";
+        position: absolute;
+        bottom: -5px;
+        left: 0;
+        width: 0;
+        height: 2px;
+        background: var(--primary);
+        transition: width 0.3s;
+      }
+
+      .nav-links a:hover::after,
+      .nav-links a.active::after {
+        width: 100%;
+      }
+
+      /* Hero Section */
+      .hero {
+        min-height: 100vh;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        background: var(--gradient-1);
+        position: relative;
+        overflow: hidden;
+        padding: 2rem;
+      }
+
+      .hero::before {
+        content: "";
+        position: absolute;
+        width: 200%;
+        height: 200%;
+        background: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1440 320"><path fill="%23ffffff" fill-opacity="0.1" d="M0,96L48,112C96,128,192,160,288,186.7C384,213,480,235,576,213.3C672,192,768,128,864,128C960,128,1056,192,1152,208C1248,224,1344,192,1392,176L1440,160L1440,320L1392,320C1344,320,1248,320,1152,320C1056,320,960,320,864,320C768,320,672,320,576,320C480,320,384,320,288,320C192,320,96,320,48,320L0,320Z"></path></svg>');
+        animation: wave 20s linear infinite;
+      }
+
+      @keyframes wave {
+        0% {
+          transform: translateX(0);
+        }
+        100% {
+          transform: translateX(-50%);
+        }
+      }
+
+      .hero-content {
+        text-align: center;
+        color: white;
+        z-index: 1;
+        max-width: 800px;
+      }
+
+      .hero h1 {
+        font-size: 4rem;
+        margin-bottom: 1rem;
+        animation: fadeInUp 1s ease;
+        text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.2);
+      }
+
+      .hero p {
+        font-size: 1.3rem;
+        margin-bottom: 2rem;
+        opacity: 0.95;
+        animation: fadeInUp 1s ease 0.2s both;
+      }
+
+      .cta-button {
+        display: inline-block;
+        padding: 1rem 3rem;
+        background: white;
+        color: var(--primary);
+        text-decoration: none;
+        border-radius: 50px;
+        font-weight: 600;
+        font-size: 1.1rem;
+        box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+        transition: all 0.3s;
+        animation: fadeInUp 1s ease 0.4s both;
+        border: none;
+        cursor: pointer;
+      }
+
+      .cta-button:hover {
+        transform: translateY(-3px);
+        box-shadow: 0 15px 40px rgba(0, 0, 0, 0.3);
+      }
+
+      @keyframes fadeInUp {
+        from {
+          opacity: 0;
+          transform: translateY(30px);
+        }
+        to {
+          opacity: 1;
+          transform: translateY(0);
+        }
+      }
+
+      /* Template Selection */
+      .templates-section {
+        padding: 5rem 5%;
+        background: white;
+      }
+
+      .section-title {
+        text-align: center;
+        margin-bottom: 3rem;
+      }
+
+      .section-title h2 {
+        font-size: 2.5rem;
+        color: var(--dark);
+        margin-bottom: 0.5rem;
+      }
+
+      .section-title p {
+        color: #64748b;
+        font-size: 1.1rem;
+      }
+
+      .template-categories {
+        display: flex;
+        justify-content: center;
+        gap: 1rem;
+        margin-bottom: 3rem;
+        flex-wrap: wrap;
+      }
+
+      .category-btn {
+        padding: 0.8rem 2rem;
+        border: 2px solid #e2e8f0;
+        background: white;
+        border-radius: 50px;
+        cursor: pointer;
+        font-weight: 500;
+        transition: all 0.3s;
+        font-family: "Poppins", sans-serif;
+      }
+
+      .category-btn.active,
+      .category-btn:hover {
+        background: var(--primary);
+        color: white;
+        border-color: var(--primary);
+        transform: translateY(-2px);
+      }
+
+      .templates-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+        gap: 2rem;
+        max-width: 1400px;
+        margin: 0 auto;
+      }
+
+      .template-card {
+        background: white;
+        border-radius: 20px;
+        overflow: hidden;
+        box-shadow: 0 10px 40px rgba(0, 0, 0, 0.1);
+        transition: all 0.3s;
+        cursor: pointer;
+        position: relative;
+      }
+
+      .template-card:hover {
+        transform: translateY(-10px);
+        box-shadow: 0 20px 60px rgba(0, 0, 0, 0.15);
+      }
+
+      .template-preview {
+        height: 400px;
+        position: relative;
+        overflow: hidden;
+      }
+
+      .template-preview img {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+        transition: transform 0.3s;
+      }
+
+      .template-card:hover .template-preview img {
+        transform: scale(1.05);
+      }
+
+      .template-overlay {
+        position: absolute;
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        background: rgba(0, 0, 0, 0.7);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        opacity: 0;
+        transition: opacity 0.3s;
+      }
+
+      .template-card:hover .template-overlay {
+        opacity: 1;
+      }
+
+      .preview-btn {
+        padding: 1rem 2rem;
+        background: white;
+        color: var(--dark);
+        border: none;
+        border-radius: 50px;
+        font-weight: 600;
+        cursor: pointer;
+        transform: translateY(20px);
+        transition: transform 0.3s;
+      }
+
+      .template-card:hover .preview-btn {
+        transform: translateY(0);
+      }
+
+      .template-info {
+        padding: 1.5rem;
+      }
+
+      .template-info h3 {
+        font-size: 1.3rem;
+        margin-bottom: 0.5rem;
+        color: var(--dark);
+      }
+
+      .template-info p {
+        color: #64748b;
+        font-size: 0.9rem;
+      }
+
+      .template-tag {
+        display: inline-block;
+        padding: 0.3rem 1rem;
+        background: var(--gradient-1);
+        color: white;
+        border-radius: 20px;
+        font-size: 0.8rem;
+        margin-top: 0.5rem;
+      }
+
+      /* Editor Section */
+      .editor-section {
+        padding: 5rem 5%;
+        background: #f1f5f9;
+        display: none;
+      }
+
+      .editor-section.active {
+        display: block;
+      }
+
+      .editor-container {
+        max-width: 1400px;
+        margin: 0 auto;
+        display: grid;
+        grid-template-columns: 1fr 2fr;
+        gap: 2rem;
+      }
+
+      .editor-panel {
+        background: white;
+        border-radius: 20px;
+        padding: 2rem;
+        box-shadow: 0 10px 40px rgba(0, 0, 0, 0.1);
+        height: fit-content;
+        position: sticky;
+        top: 100px;
+      }
+
+      .panel-title {
+        font-size: 1.5rem;
+        margin-bottom: 1.5rem;
+        color: var(--dark);
+        display: flex;
+        align-items: center;
+        gap: 0.5rem;
+      }
+
+      .input-group {
+        margin-bottom: 1.5rem;
+      }
+
+      .input-group label {
+        display: block;
+        margin-bottom: 0.5rem;
+        font-weight: 500;
+        color: #475569;
+      }
+
+      .input-group input,
+      .input-group textarea,
+      .input-group select {
+        width: 100%;
+        padding: 0.8rem 1rem;
+        border: 2px solid #e2e8f0;
+        border-radius: 10px;
+        font-family: "Poppins", sans-serif;
+        transition: border-color 0.3s;
+      }
+
+      .input-group input:focus,
+      .input-group textarea:focus,
+      .input-group select:focus {
+        outline: none;
+        border-color: var(--primary);
+      }
+
+      .input-group textarea {
+        resize: vertical;
+        min-height: 100px;
+      }
+
+      /* Name Input Methods */
+      .name-input-tabs {
+        display: flex;
+        gap: 0.5rem;
+        margin-bottom: 1rem;
+      }
+
+      .tab-btn {
+        flex: 1;
+        padding: 0.8rem;
+        border: 2px solid #e2e8f0;
+        background: white;
+        border-radius: 10px;
+        cursor: pointer;
+        font-weight: 500;
+        transition: all 0.3s;
+        font-family: "Poppins", sans-serif;
+      }
+
+      .tab-btn.active {
+        background: var(--primary);
+        color: white;
+        border-color: var(--primary);
+      }
+
+      .tab-content {
+        display: none;
+      }
+
+      .tab-content.active {
+        display: block;
+      }
+
+      .file-upload {
+        border: 2px dashed #cbd5e1;
+        border-radius: 10px;
+        padding: 2rem;
+        text-align: center;
+        cursor: pointer;
+        transition: all 0.3s;
+        background: #f8fafc;
+      }
+
+      .file-upload:hover {
+        border-color: var(--primary);
+        background: #eef2ff;
+      }
+
+      .file-upload i {
+        font-size: 2rem;
+        color: var(--primary);
+        margin-bottom: 0.5rem;
+      }
+
+      .file-upload p {
+        color: #64748b;
+        font-size: 0.9rem;
+      }
+
+      #fileInput {
+        display: none;
+      }
+
+      .name-list {
+        margin-top: 1rem;
+        max-height: 200px;
+        overflow-y: auto;
+        border: 1px solid #e2e8f0;
+        border-radius: 10px;
+        padding: 1rem;
+      }
+
+      .name-item {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        padding: 0.5rem;
+        background: #f8fafc;
+        border-radius: 5px;
+        margin-bottom: 0.5rem;
+      }
+
+      .name-item button {
+        background: #ef4444;
+        color: white;
+        border: none;
+        padding: 0.3rem 0.8rem;
+        border-radius: 5px;
+        cursor: pointer;
+        font-size: 0.8rem;
+      }
+
+      .action-buttons {
+        display: flex;
+        gap: 1rem;
+        margin-top: 2rem;
+      }
+
+      .btn-primary {
+        flex: 1;
+        padding: 1rem;
+        background: var(--gradient-1);
+        color: white;
+        border: none;
+        border-radius: 10px;
+        font-weight: 600;
+        cursor: pointer;
+        transition: transform 0.3s;
+        font-family: "Poppins", sans-serif;
+      }
+
+      .btn-primary:hover {
+        transform: translateY(-2px);
+      }
+
+      .btn-secondary {
+        flex: 1;
+        padding: 1rem;
+        background: white;
+        color: var(--dark);
+        border: 2px solid #e2e8f0;
+        border-radius: 10px;
+        font-weight: 600;
+        cursor: pointer;
+        transition: all 0.3s;
+        font-family: "Poppins", sans-serif;
+      }
+
+      .btn-secondary:hover {
+        border-color: var(--primary);
+        color: var(--primary);
+      }
+
+      /* Preview Area */
+      .preview-area {
+        background: white;
+        border-radius: 20px;
+        padding: 2rem;
+        box-shadow: 0 10px 40px rgba(0, 0, 0, 0.1);
+        min-height: 600px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+      }
+
+      .invitation-preview {
+        width: 100%;
+        max-width: 500px;
+        aspect-ratio: 3/4;
+        border-radius: 15px;
+        overflow: hidden;
+        position: relative;
+        box-shadow: 0 20px 60px rgba(0, 0, 0, 0.2);
+        transition: transform 0.3s;
+      }
+
+      .invitation-preview:hover {
+        transform: scale(1.02);
+      }
+
+      /* Template Styles */
+      .template-wedding {
+        background: linear-gradient(135deg, #ffeaa7 0%, #fab1a0 100%);
+        font-family: "Great Vibes", cursive;
+        padding: 3rem 2rem;
+        text-align: center;
+        height: 100%;
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        position: relative;
+        overflow: hidden;
+      }
+
+      .template-wedding::before {
+        content: "❦";
+        position: absolute;
+        top: 20px;
+        left: 50%;
+        transform: translateX(-50%);
+        font-size: 3rem;
+        opacity: 0.3;
+      }
+
+      .template-wedding h2 {
+        font-size: 3rem;
+        color: #d63031;
+        margin-bottom: 1rem;
+      }
+
+      .template-wedding .couple-names {
+        font-size: 2.5rem;
+        color: #2d3436;
+        margin: 1rem 0;
+      }
+
+      .template-wedding .details {
+        font-family: "Cormorant Garamond", serif;
+        font-size: 1.2rem;
+        color: #636e72;
+        margin: 1.5rem 0;
+      }
+
+      .template-wedding .guest-name {
+        font-family: "Poppins", sans-serif;
+        font-size: 1.3rem;
+        color: #2d3436;
+        margin-top: 2rem;
+        padding: 1rem;
+        background: rgba(255, 255, 255, 0.5);
+        border-radius: 10px;
+        font-weight: 600;
+      }
+
+      .template-birthday {
+        background: var(--gradient-2);
+        font-family: "Poppins", sans-serif;
+        padding: 3rem 2rem;
+        text-align: center;
+        height: 100%;
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        position: relative;
+        overflow: hidden;
+      }
+
+      .template-birthday::before {
+        content: "🎉";
+        position: absolute;
+        font-size: 8rem;
+        opacity: 0.1;
+        top: 10%;
+        right: -10%;
+        animation: float 3s ease-in-out infinite;
+      }
+
+      @keyframes float {
+        0%,
+        100% {
+          transform: translateY(0);
+        }
+        50% {
+          transform: translateY(-20px);
+        }
+      }
+
+      .template-birthday h2 {
+        font-size: 2.5rem;
+        color: white;
+        text-transform: uppercase;
+        letter-spacing: 3px;
+        margin-bottom: 1rem;
+      }
+
+      .template-birthday .age {
+        font-size: 5rem;
+        font-weight: 700;
+        color: white;
+        text-shadow: 3px 3px 6px rgba(0, 0, 0, 0.2);
+      }
+
+      .template-birthday .details {
+        color: rgba(255, 255, 255, 0.9);
+        margin: 1.5rem 0;
+        font-size: 1.1rem;
+      }
+
+      .template-birthday .guest-name {
+        font-size: 1.5rem;
+        color: white;
+        margin-top: 2rem;
+        font-weight: 700;
+        background: rgba(255, 255, 255, 0.2);
+        padding: 0.5rem 1.5rem;
+        border-radius: 50px;
+        display: inline-block;
+      }
+
+      .template-corporate {
+        background: #1e293b;
+        font-family: "Montserrat", sans-serif;
+        padding: 3rem 2rem;
+        text-align: center;
+        height: 100%;
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        border: 3px solid #334155;
+      }
+
+      .template-corporate h2 {
+        font-size: 1.8rem;
+        color: #fbbf24;
+        text-transform: uppercase;
+        letter-spacing: 5px;
+        margin-bottom: 1rem;
+      }
+
+      .template-corporate .company {
+        font-size: 2rem;
+        color: white;
+        font-weight: 600;
+        margin: 1rem 0;
+      }
+
+      .template-corporate .details {
+        color: #94a3b8;
+        margin: 1.5rem 0;
+        line-height: 1.8;
+      }
+
+      .template-corporate .guest-name {
+        color: #fbbf24;
+        font-size: 1.3rem;
+        margin-top: 2rem;
+        text-transform: uppercase;
+        letter-spacing: 2px;
+        font-weight: 700;
+      }
+
+      .template-interview {
+        background: white;
+        font-family: "Poppins", sans-serif;
+        padding: 3rem 2rem;
+        text-align: center;
+        height: 100%;
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        border: 4px solid var(--primary);
+        position: relative;
+      }
+
+      .template-interview::before {
+        content: "";
+        position: absolute;
+        top: 0;
+        left: 0;
+        right: 0;
+        height: 10px;
+        background: var(--gradient-1);
+      }
+
+      .template-interview h2 {
+        color: var(--primary);
+        font-size: 2rem;
+        margin-bottom: 0.5rem;
+      }
+
+      .template-interview .company {
+        font-size: 1.5rem;
+        color: var(--dark);
+        font-weight: 600;
+      }
+
+      .template-interview .position {
+        background: var(--gradient-1);
+        color: white;
+        padding: 0.5rem 1.5rem;
+        border-radius: 50px;
+        display: inline-block;
+        margin: 1rem 0;
+        font-weight: 600;
+      }
+
+      .template-interview .details {
+        color: #64748b;
+        margin: 1.5rem 0;
+      }
+
+      .template-interview .guest-name {
+        font-size: 1.4rem;
+        color: var(--dark);
+        font-weight: 700;
+        margin-top: 2rem;
+        background: #eef2ff;
+        padding: 0.8rem 1.5rem;
+        border-radius: 10px;
+        display: inline-block;
+      }
+
+      .template-event {
+        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        font-family: "Playfair Display", serif;
+        padding: 3rem 2rem;
+        text-align: center;
+        height: 100%;
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        color: white;
+        position: relative;
+        overflow: hidden;
+      }
+
+      .template-event::before {
+        content: "";
+        position: absolute;
+        width: 200%;
+        height: 200%;
+        background: repeating-linear-gradient(
+          45deg,
+          transparent,
+          transparent 10px,
+          rgba(255, 255, 255, 0.05) 10px,
+          rgba(255, 255, 255, 0.05) 20px
+        );
+        animation: slide 20s linear infinite;
+      }
+
+      @keyframes slide {
+        0% {
+          transform: translate(0, 0);
+        }
+        100% {
+          transform: translate(50px, 50px);
+        }
+      }
+
+      .template-event h2 {
+        font-size: 2.5rem;
+        margin-bottom: 1rem;
+        position: relative;
+        z-index: 1;
+      }
+
+      .template-event .event-type {
+        font-size: 1.2rem;
+        opacity: 0.9;
+        text-transform: uppercase;
+        letter-spacing: 3px;
+        position: relative;
+        z-index: 1;
+      }
+
+      .template-event .details {
+        margin: 2rem 0;
+        font-family: "Poppins", sans-serif;
+        position: relative;
+        z-index: 1;
+      }
+
+      .template-event .guest-name {
+        font-size: 1.5rem;
+        margin-top: 2rem;
+        padding: 1rem 2rem;
+        background: rgba(255, 255, 255, 0.2);
+        border-radius: 50px;
+        display: inline-block;
+        position: relative;
+        z-index: 1;
+        font-weight: 700;
+        border: 2px solid rgba(255, 255, 255, 0.3);
+      }
+
+      /* Modal */
+      .modal {
+        display: none;
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background: rgba(0, 0, 0, 0.8);
+        z-index: 2000;
+        align-items: center;
+        justify-content: center;
+        padding: 2rem;
+      }
+
+      .modal.active {
+        display: flex;
+      }
+
+      .modal-content {
+        background: white;
+        border-radius: 20px;
+        padding: 2rem;
+        max-width: 800px;
+        width: 100%;
+        max-height: 90vh;
+        overflow-y: auto;
+        position: relative;
+      }
+
+      .close-modal {
+        position: absolute;
+        top: 1rem;
+        right: 1rem;
+        background: none;
+        border: none;
+        font-size: 1.5rem;
+        cursor: pointer;
+        color: #64748b;
+      }
+
+      .close-modal:hover {
+        color: var(--dark);
+      }
+
+      /* Footer */
+      footer {
+        background: var(--dark);
+        color: white;
+        padding: 3rem 5%;
+        text-align: center;
+      }
+
+      .footer-content {
+        max-width: 1200px;
+        margin: 0 auto;
+      }
+
+      .footer-logo {
+        font-size: 2rem;
+        font-weight: 700;
+        margin-bottom: 1rem;
+      }
+
+      .footer-links {
+        display: flex;
+        justify-content: center;
+        gap: 2rem;
+        margin: 2rem 0;
+        flex-wrap: wrap;
+      }
+
+      .footer-links a {
+        color: #94a3b8;
+        text-decoration: none;
+        transition: color 0.3s;
+        cursor: pointer;
+      }
+
+      .footer-links a:hover {
+        color: white;
+      }
+
+      .social-links {
+        display: flex;
+        justify-content: center;
+        gap: 1rem;
+        margin-top: 2rem;
+      }
+
+      .social-links a {
+        width: 40px;
+        height: 40px;
+        background: rgba(255, 255, 255, 0.1);
+        border-radius: 50%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        color: white;
+        text-decoration: none;
+        transition: all 0.3s;
+      }
+
+      .social-links a:hover {
+        background: var(--primary);
+        transform: translateY(-3px);
+      }
+
+      /* Responsive */
+      @media (max-width: 968px) {
+        .editor-container {
+          grid-template-columns: 1fr;
+        }
+
+        .editor-panel {
+          position: static;
+        }
+
+        .hero h1 {
+          font-size: 2.5rem;
+        }
+
+        .nav-links {
+          display: none;
+        }
+      }
+
+      /* Loading Animation */
+      .loading {
+        display: none;
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background: rgba(255, 255, 255, 0.9);
+        z-index: 3000;
+        align-items: center;
+        justify-content: center;
+        flex-direction: column;
+      }
+
+      .loading.active {
+        display: flex;
+      }
+
+      .spinner {
+        width: 50px;
+        height: 50px;
+        border: 5px solid #e2e8f0;
+        border-top-color: var(--primary);
+        border-radius: 50%;
+        animation: spin 1s linear infinite;
+      }
+
+      @keyframes spin {
+        to {
+          transform: rotate(360deg);
+        }
+      }
+
+      .loading p {
+        margin-top: 1rem;
+        color: var(--dark);
+        font-weight: 500;
+      }
+
+      /* Success Message */
+      .success-message {
+        position: fixed;
+        top: 100px;
+        right: 20px;
+        background: #10b981;
+        color: white;
+        padding: 1rem 2rem;
+        border-radius: 10px;
+        box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+        transform: translateX(400px);
+        transition: transform 0.3s;
+        z-index: 1500;
+      }
+
+      .success-message.show {
+        transform: translateX(0);
+      }
+
+      /* Guest Name Highlight */
+      .guest-name-preview {
+        animation: pulse 2s infinite;
+      }
+
+      @keyframes pulse {
+        0%,
+        100% {
+          transform: scale(1);
+        }
+        50% {
+          transform: scale(1.05);
+        }
+      }
+
+      /* Mobile Menu */
+      .mobile-menu-btn {
+        display: none;
+        background: none;
+        border: none;
+        font-size: 1.5rem;
+        color: var(--dark);
+        cursor: pointer;
+      }
+
+      @media (max-width: 768px) {
+        .mobile-menu-btn {
+          display: block;
+        }
+
+        .nav-links {
+          position: fixed;
+          top: 70px;
+          left: 0;
+          right: 0;
+          background: white;
+          flex-direction: column;
+          padding: 2rem;
+          box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+          transform: translateY(-150%);
+          transition: transform 0.3s;
+        }
+
+        .nav-links.active {
+          transform: translateY(0);
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <!-- Navigation -->
+    <nav id="navbar">
+      <div class="logo" onclick="goToHome()">
+        <i class="fas fa-envelope-open-text"></i>
+        UndangKita
+      </div>
+      <button class="mobile-menu-btn" onclick="toggleMobileMenu()">
+        <i class="fas fa-bars"></i>
+      </button>
+      <ul class="nav-links" id="navLinks">
+        <li><a onclick="goToHome()" class="nav-link">Beranda</a></li>
+        <li><a onclick="goToTemplates()" class="nav-link">Template</a></li>
+        <li><a onclick="goToFeatures()" class="nav-link">Fitur</a></li>
+        <li><a onclick="goToContact()" class="nav-link">Kontak</a></li>
+      </ul>
+    </nav>
+
+    <!-- Hero Section -->
+    <section class="hero" id="home">
+      <div class="hero-content">
+        <h1>Buat Undangan Digital Impianmu</h1>
+        <p>
+          Platform pembuat undangan online terlengkap dengan berbagai template
+          modern dan elegan. Mulai dari undangan pernikahan, ulang tahun,
+          wawancara kerja, hingga acara corporate.
+        </p>
+        <button class="cta-button" onclick="goToTemplates()">
+          <i class="fas fa-magic"></i> Mulai Buat Undangan
+        </button>
+      </div>
+    </section>
+
+    <!-- Templates Section -->
+    <section class="templates-section" id="templates">
+      <div class="section-title">
+        <h2>Pilih Template Favoritmu</h2>
+        <p>
+          Berbagai pilihan template yang dapat disesuaikan dengan kebutuhan
+          acaramu
+        </p>
+      </div>
+
+      <div class="template-categories">
+        <button
+          class="category-btn active"
+          onclick="filterTemplates('all', this)"
+        >
+          Semua
+        </button>
+        <button class="category-btn" onclick="filterTemplates('wedding', this)">
+          Pernikahan
+        </button>
+        <button
+          class="category-btn"
+          onclick="filterTemplates('birthday', this)"
+        >
+          Ulang Tahun
+        </button>
+        <button
+          class="category-btn"
+          onclick="filterTemplates('corporate', this)"
+        >
+          Corporate
+        </button>
+        <button
+          class="category-btn"
+          onclick="filterTemplates('interview', this)"
+        >
+          Interview
+        </button>
+        <button class="category-btn" onclick="filterTemplates('event', this)">
+          Acara
+        </button>
+      </div>
+
+      <div class="templates-grid" id="templatesGrid">
+        <!-- Wedding Template 1 -->
+        <div
+          class="template-card"
+          data-category="wedding"
+          onclick="selectTemplate('wedding')"
+        >
+          <div class="template-preview">
+            <div
+              style="
+                height: 100%;
+                background: linear-gradient(135deg, #ffeaa7 0%, #fab1a0 100%);
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                font-family: &quot;Great Vibes&quot;, cursive;
+                color: #d63031;
+                font-size: 2rem;
+              "
+            >
+              Wedding Elegance
+            </div>
+            <div class="template-overlay">
+              <button class="preview-btn">Gunakan Template</button>
+            </div>
+          </div>
+          <div class="template-info">
+            <h3>Wedding Elegance</h3>
+            <p>Template pernikahan dengan nuansa romantis dan klasik</p>
+            <span class="template-tag">Pernikahan</span>
+          </div>
+        </div>
+
+        <!-- Birthday Template -->
+        <div
+          class="template-card"
+          data-category="birthday"
+          onclick="selectTemplate('birthday')"
+        >
+          <div class="template-preview">
+            <div
+              style="
+                height: 100%;
+                background: var(--gradient-2);
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                color: white;
+                font-family: &quot;Poppins&quot;, sans-serif;
+                font-size: 2rem;
+                font-weight: bold;
+              "
+            >
+              Birthday Bash
+            </div>
+            <div class="template-overlay">
+              <button class="preview-btn">Gunakan Template</button>
+            </div>
+          </div>
+          <div class="template-info">
+            <h3>Birthday Bash</h3>
+            <p>Template ulang tahun yang ceria dan modern</p>
+            <span class="template-tag">Ulang Tahun</span>
+          </div>
+        </div>
+
+        <!-- Corporate Template -->
+        <div
+          class="template-card"
+          data-category="corporate"
+          onclick="selectTemplate('corporate')"
+        >
+          <div class="template-preview">
+            <div
+              style="
+                height: 100%;
+                background: #1e293b;
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                color: #fbbf24;
+                font-family: &quot;Montserrat&quot;, sans-serif;
+                font-size: 1.5rem;
+                border: 3px solid #334155;
+              "
+            >
+              Corporate Event
+            </div>
+            <div class="template-overlay">
+              <button class="preview-btn">Gunakan Template</button>
+            </div>
+          </div>
+          <div class="template-info">
+            <h3>Corporate Premium</h3>
+            <p>Template profesional untuk acara perusahaan</p>
+            <span class="template-tag">Corporate</span>
+          </div>
+        </div>
+
+        <!-- Interview Template -->
+        <div
+          class="template-card"
+          data-category="interview"
+          onclick="selectTemplate('interview')"
+        >
+          <div class="template-preview">
+            <div
+              style="
+                height: 100%;
+                background: white;
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                color: var(--primary);
+                font-family: &quot;Poppins&quot;, sans-serif;
+                font-size: 1.5rem;
+                border: 4px solid var(--primary);
+              "
+            >
+              Interview Call
+            </div>
+            <div class="template-overlay">
+              <button class="preview-btn">Gunakan Template</button>
+            </div>
+          </div>
+          <div class="template-info">
+            <h3>Interview Professional</h3>
+            <p>Template undangan wawancara kerja yang formal</p>
+            <span class="template-tag">Interview</span>
+          </div>
+        </div>
+
+        <!-- Event Template -->
+        <div
+          class="template-card"
+          data-category="event"
+          onclick="selectTemplate('event')"
+        >
+          <div class="template-preview">
+            <div
+              style="
+                height: 100%;
+                background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                color: white;
+                font-family: &quot;Playfair Display&quot;, serif;
+                font-size: 2rem;
+              "
+            >
+              Special Event
+            </div>
+            <div class="template-overlay">
+              <button class="preview-btn">Gunakan Template</button>
+            </div>
+          </div>
+          <div class="template-info">
+            <h3>Grand Event</h3>
+            <p>Template serbaguna untuk berbagai acara spesial</p>
+            <span class="template-tag">Acara</span>
+          </div>
+        </div>
+
+        <!-- Wedding Template 2 -->
+        <div
+          class="template-card"
+          data-category="wedding"
+          onclick="selectTemplate('wedding2')"
+        >
+          <div class="template-preview">
+            <div
+              style="
+                height: 100%;
+                background: linear-gradient(135deg, #fa709a 0%, #fee140 100%);
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                color: white;
+                font-family: &quot;Cormorant Garamond&quot;, serif;
+                font-size: 2rem;
+              "
+            >
+              Modern Wedding
+            </div>
+            <div class="template-overlay">
+              <button class="preview-btn">Gunakan Template</button>
+            </div>
+          </div>
+          <div class="template-info">
+            <h3>Modern Wedding</h3>
+            <p>Template pernikahan dengan desain kontemporer</p>
+            <span class="template-tag">Pernikahan</span>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Editor Section -->
+    <section class="editor-section" id="editor">
+      <div class="section-title">
+        <h2>Kustomisasi Undanganmu</h2>
+        <p>Isi detail acara dan daftar tamu undangan</p>
+      </div>
+
+      <div class="editor-container">
+        <div class="editor-panel">
+          <h3 class="panel-title">
+            <i class="fas fa-edit"></i>
+            Detail Acara
+          </h3>
+
+          <div class="input-group">
+            <label>Judul Acara</label>
+            <input
+              type="text"
+              id="eventTitle"
+              placeholder="Contoh: Wedding of John & Jane"
+              oninput="updatePreview()"
+            />
+          </div>
+
+          <div class="input-group">
+            <label>Subjudul / Tema</label>
+            <input
+              type="text"
+              id="eventSubtitle"
+              placeholder="Contoh: We are getting married!"
+              oninput="updatePreview()"
+            />
+          </div>
+
+          <div class="input-group">
+            <label>Tanggal & Waktu</label>
+            <input
+              type="text"
+              id="eventDate"
+              placeholder="Contoh: Sabtu, 25 Desember 2026"
+              oninput="updatePreview()"
+            />
+          </div>
+
+          <div class="input-group">
+            <label>Lokasi</label>
+            <textarea
+              id="eventLocation"
+              placeholder="Contoh: Hotel Grand Indonesia, Jakarta"
+              oninput="updatePreview()"
+            ></textarea>
+          </div>
+
+          <div class="input-group">
+            <label>Tambahan Informasi</label>
+            <textarea
+              id="eventNotes"
+              placeholder="Dress code, RSVP, dll"
+              oninput="updatePreview()"
+            ></textarea>
+          </div>
+
+          <h3 class="panel-title" style="margin-top: 2rem">
+            <i class="fas fa-users"></i>
+            Daftar Tamu
+          </h3>
+
+          <div class="name-input-tabs">
+            <button class="tab-btn active" onclick="switchTab('manual')">
+              Manual
+            </button>
+            <button class="tab-btn" onclick="switchTab('excel')">
+              Upload Excel
+            </button>
+          </div>
+
+          <div class="tab-content active" id="manualTab">
+            <div class="input-group">
+              <label>Nama Tamu</label>
+              <input
+                type="text"
+                id="guestName"
+                placeholder="Masukkan nama tamu"
+                onkeypress="handleManualInput(event)"
+              />
+              <small style="color: #64748b; font-size: 0.8rem"
+                >Tekan Enter untuk menambahkan</small
+              >
+            </div>
+            <div class="name-list" id="manualNameList">
+              <!-- Names will appear here -->
+            </div>
+          </div>
+
+          <div class="tab-content" id="excelTab">
+            <div
+              class="file-upload"
+              onclick="document.getElementById('fileInput').click()"
+            >
+              <i class="fas fa-cloud-upload-alt"></i>
+              <p>Klik atau drag file Excel (.xlsx, .xls) disini</p>
+              <small style="color: #94a3b8"
+                >Kolom pertama harus berisi nama tamu</small
+              >
+            </div>
+            <input
+              type="file"
+              id="fileInput"
+              accept=".xlsx,.xls"
+              onchange="handleFileUpload(event)"
+            />
+            <div class="name-list" id="excelNameList" style="display: none">
+              <!-- Excel names will appear here -->
+            </div>
+          </div>
+
+          <div class="action-buttons">
+            <button class="btn-primary" onclick="generateInvitations()">
+              <i class="fas fa-paper-plane"></i> Generate Undangan
+            </button>
+            <button class="btn-secondary" onclick="backToTemplates()">
+              <i class="fas fa-arrow-left"></i> Kembali ke Template
+            </button>
+          </div>
+        </div>
+
+        <div class="preview-area">
+          <div class="invitation-preview" id="invitationPreview">
+            <div
+              style="
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                height: 100%;
+                color: #94a3b8;
+                flex-direction: column;
+              "
+            >
+              <i
+                class="fas fa-image"
+                style="font-size: 3rem; margin-bottom: 1rem"
+              ></i>
+              <p>Pilih template untuk melihat preview</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Features Section -->
+    <section class="templates-section" id="features">
+      <div class="section-title">
+        <h2>Mengapa Memilih UndangKita?</h2>
+        <p>
+          Fitur unggulan yang membuat pembuatan undangan menjadi mudah dan cepat
+        </p>
+      </div>
+
+      <div class="templates-grid" style="margin-top: 3rem">
+        <div style="text-align: center; padding: 2rem">
+          <div
+            style="
+              width: 80px;
+              height: 80px;
+              background: var(--gradient-1);
+              border-radius: 50%;
+              display: flex;
+              align-items: center;
+              justify-content: center;
+              margin: 0 auto 1rem;
+              color: white;
+              font-size: 2rem;
+            "
+          >
+            <i class="fas fa-palette"></i>
+          </div>
+          <h3>Template Modern</h3>
+          <p>Puluhan template dengan desain profesional dan up-to-date</p>
+        </div>
+
+        <div style="text-align: center; padding: 2rem">
+          <div
+            style="
+              width: 80px;
+              height: 80px;
+              background: var(--gradient-2);
+              border-radius: 50%;
+              display: flex;
+              align-items: center;
+              justify-content: center;
+              margin: 0 auto 1rem;
+              color: white;
+              font-size: 2rem;
+            "
+          >
+            <i class="fas fa-file-excel"></i>
+          </div>
+          <h3>Import Excel</h3>
+          <p>Upload file Excel untuk mengisi nama tamu secara otomatis</p>
+        </div>
+
+        <div style="text-align: center; padding: 2rem">
+          <div
+            style="
+              width: 80px;
+              height: 80px;
+              background: var(--gradient-3);
+              border-radius: 50%;
+              display: flex;
+              align-items: center;
+              justify-content: center;
+              margin: 0 auto 1rem;
+              color: white;
+              font-size: 2rem;
+            "
+          >
+            <i class="fas fa-bolt"></i>
+          </div>
+          <h3>Cepat & Mudah</h3>
+          <p>Buat undangan dalam hitungan menit tanpa keahlian desain</p>
+        </div>
+
+        <div style="text-align: center; padding: 2rem">
+          <div
+            style="
+              width: 80px;
+              height: 80px;
+              background: var(--gradient-4);
+              border-radius: 50%;
+              display: flex;
+              align-items: center;
+              justify-content: center;
+              margin: 0 auto 1rem;
+              color: white;
+              font-size: 2rem;
+            "
+          >
+            <i class="fas fa-download"></i>
+          </div>
+          <h3>Download PDF</h3>
+          <p>Unduh undangan dalam format PDF siap cetak atau kirim</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- Footer -->
+    <footer id="contact">
+      <div class="footer-content">
+        <div class="footer-logo">
+          <i class="fas fa-envelope-open-text"></i> UndangKita
+        </div>
+        <p>Platform pembuat undangan digital terbaik untuk momen spesialmu</p>
+
+        <div class="footer-links">
+          <a onclick="goToHome()">Tentang Kami</a>
+          <a onclick="goToFeatures()">Cara Penggunaan</a>
+          <a onclick="showPrivacy()">Kebijakan Privasi</a>
+          <a onclick="showTerms()">Syarat & Ketentuan</a>
+          <a onclick="goToContact()">Hubungi Kami</a>
+        </div>
+
+        <div class="social-links">
+          <a href="#"><i class="fab fa-instagram"></i></a>
+          <a href="#"><i class="fab fa-facebook-f"></i></a>
+          <a href="#"><i class="fab fa-twitter"></i></a>
+          <a href="#"><i class="fab fa-whatsapp"></i></a>
+        </div>
+
+        <p style="margin-top: 2rem; color: #64748b; font-size: 0.9rem">
+          © 2026 UndangKita. All rights reserved.
+        </p>
+      </div>
+    </footer>
+
+    <!-- Loading Screen -->
+    <div class="loading" id="loading">
+      <div class="spinner"></div>
+      <p>Sedang membuat undangan...</p>
+    </div>
+
+    <!-- Success Message -->
+    <div class="success-message" id="successMessage">
+      <i class="fas fa-check-circle"></i> Undangan berhasil dibuat!
+    </div>
+
+    <script>
+      let currentTemplate = "";
+      let guestNames = [];
+      let currentGuestIndex = 0;
+
+      // Template definitions
+      const templates = {
+        wedding: {
+          class: "template-wedding",
+          html: (data) => `
+                    <h2>The Wedding of</h2>
+                    <div class="couple-names">${data.title || "John & Jane"}</div>
+                    <div class="details">
+                        ${data.subtitle || "Request the pleasure of your company"}<br><br>
+                        <strong>${data.date || "Saturday, December 25, 2026"}</strong><br>
+                        ${data.location || "Grand Ballroom, Hotel Indonesia"}<br><br>
+                        ${data.notes || "Dress code: Formal"}
+                    </div>
+                    <div class="guest-name guest-name-preview">${data.guestName || "Kepada Yth. Guest Name"}</div>
+                `,
+        },
+        birthday: {
+          class: "template-birthday",
+          html: (data) => `
+                    <h2>You're Invited!</h2>
+                    <div class="age">${data.subtitle || "25th"}</div>
+                    <h2 style="font-size: 1.5rem;">Birthday Celebration</h2>
+                    <div class="details">
+                        Join us to celebrate<br>
+                        <strong style="font-size: 1.3rem;">${data.title || "John Doe"}</strong><br><br>
+                        ${data.date || "Saturday, December 25, 2026"}<br>
+                        ${data.location || "Rooftop Cafe, Jakarta"}<br><br>
+                        ${data.notes || "Come hungry, leave happy!"}
+                    </div>
+                    <div class="guest-name guest-name-preview">${data.guestName || "Hello Friend!"}</div>
+                `,
+        },
+        corporate: {
+          class: "template-corporate",
+          html: (data) => `
+                    <h2>Exclusive Invitation</h2>
+                    <div class="company">${data.title || "Company Name"}</div>
+                    <div class="details">
+                        cordially invites you to attend<br><br>
+                        <strong style="color: white; font-size: 1.2rem;">${data.subtitle || "Annual Gala Dinner"}</strong><br><br>
+                        ${data.date || "Saturday, December 25, 2026"}<br>
+                        ${data.location || "Grand Hyatt Hotel, Jakarta"}<br><br>
+                        ${data.notes || "Business Attire Required"}
+                    </div>
+                    <div class="guest-name guest-name-preview">${data.guestName || "Valued Guest"}</div>
+                `,
+        },
+        interview: {
+          class: "template-interview",
+          html: (data) => `
+                    <h2>Interview Invitation</h2>
+                    <div class="company">${data.title || "PT. Company Name"}</div>
+                    <div class="position">${data.subtitle || "Position: Marketing Manager"}</div>
+                    <div class="details">
+                        We are pleased to invite you for an interview<br><br>
+                        <strong>Date & Time:</strong><br>
+                        ${data.date || "Monday, December 27, 2026 - 10:00 AM"}<br><br>
+                        <strong>Location:</strong><br>
+                        ${data.location || "Jl. Sudirman No. 1, Jakarta"}<br><br>
+                        ${data.notes || "Please bring your CV and portfolio"}
+                    </div>
+                    <div class="guest-name guest-name-preview">${data.guestName || "Dear Candidate"}</div>
+                `,
+        },
+        event: {
+          class: "template-event",
+          html: (data) => `
+                    <div class="event-type">Special Invitation</div>
+                    <h2>${data.title || "Grand Opening"}</h2>
+                    <div class="details">
+                        ${data.subtitle || "Celebrating our new chapter"}<br><br>
+                        <i class="far fa-calendar-alt"></i> ${data.date || "Saturday, December 25, 2026"}<br>
+                        <i class="fas fa-map-marker-alt"></i> ${data.location || "Main Hall, Jakarta Convention Center"}<br><br>
+                        ${data.notes || "Free entry for all invited guests"}
+                    </div>
+                    <div class="guest-name guest-name-preview">${data.guestName || "Distinguished Guest"}</div>
+                `,
+        },
+        wedding2: {
+          class: "template-wedding",
+          html: (data) => `
+                    <h2 style="font-family: 'Cormorant Garamond', serif;">Together with their families</h2>
+                    <div class="couple-names" style="font-family: 'Playfair Display', serif;">${data.title || "Alex & Sarah"}</div>
+                    <div class="details" style="font-family: 'Montserrat', sans-serif;">
+                        invite you to celebrate their marriage<br><br>
+                        <strong>${data.date || "Saturday, December 25, 2026"}</strong><br>
+                        at ${data.location || "The Glass House, Bali"}<br><br>
+                        ${data.notes || "Reception to follow ceremony"}
+                    </div>
+                    <div class="guest-name guest-name-preview">${data.guestName || "Dear Beloved Friend"}</div>
+                `,
+        },
+      };
+
+      // Navigation Functions
+      function goToHome() {
+        closeMobileMenu();
+        document.getElementById("home").scrollIntoView({ behavior: "smooth" });
+        updateActiveNav("home");
+      }
+
+      function goToTemplates() {
+        closeMobileMenu();
+        // Hide editor if open
+        document.getElementById("editor").classList.remove("active");
+        document.getElementById("templates").style.display = "block";
+        document
+          .getElementById("templates")
+          .scrollIntoView({ behavior: "smooth" });
+        updateActiveNav("templates");
+      }
+
+      function goToFeatures() {
+        closeMobileMenu();
+        document
+          .getElementById("features")
+          .scrollIntoView({ behavior: "smooth" });
+        updateActiveNav("features");
+      }
+
+      function goToContact() {
+        closeMobileMenu();
+        document
+          .getElementById("contact")
+          .scrollIntoView({ behavior: "smooth" });
+        updateActiveNav("contact");
+      }
+
+      function updateActiveNav(section) {
+        document.querySelectorAll(".nav-link").forEach((link) => {
+          link.classList.remove("active");
+        });
+
+        const activeLink = document.querySelector(
+          `a[onclick="goTo${section.charAt(0).toUpperCase() + section.slice(1)}()"]`,
+        );
+        if (activeLink) activeLink.classList.add("active");
+      }
+
+      function toggleMobileMenu() {
+        const navLinks = document.getElementById("navLinks");
+        navLinks.classList.toggle("active");
+      }
+
+      function closeMobileMenu() {
+        const navLinks = document.getElementById("navLinks");
+        navLinks.classList.remove("active");
+      }
+
+      function filterTemplates(category, btn) {
+        // Update active button
+        document
+          .querySelectorAll(".category-btn")
+          .forEach((b) => b.classList.remove("active"));
+        btn.classList.add("active");
+
+        // Filter cards
+        const cards = document.querySelectorAll(".template-card");
+        cards.forEach((card) => {
+          if (category === "all" || card.dataset.category === category) {
+            card.style.display = "block";
+            card.style.animation = "fadeInUp 0.5s ease";
+          } else {
+            card.style.display = "none";
+          }
+        });
+      }
+
+      function selectTemplate(templateType) {
+        currentTemplate = templateType;
+        document.getElementById("templates").style.display = "none";
+        document.getElementById("editor").classList.add("active");
+        document
+          .getElementById("editor")
+          .scrollIntoView({ behavior: "smooth" });
+
+        // Reset form
+        guestNames = [];
+        updateNameList();
+
+        // Initialize preview with default data
+        updatePreview();
+
+        showSuccess(
+          "Template dipilih! Silakan isi detail acara dan tambahkan nama tamu.",
+        );
+      }
+
+      function backToTemplates() {
+        // Reset editor state
+        currentTemplate = "";
+        guestNames = [];
+
+        // Hide editor
+        document.getElementById("editor").classList.remove("active");
+
+        // Show templates
+        document.getElementById("templates").style.display = "block";
+
+        // Scroll to templates
+        document
+          .getElementById("templates")
+          .scrollIntoView({ behavior: "smooth" });
+
+        // Reset preview
+        document.getElementById("invitationPreview").innerHTML = `
+                <div style="display: flex; align-items: center; justify-content: center; height: 100%; color: #94a3b8; flex-direction: column;">
+                    <i class="fas fa-image" style="font-size: 3rem; margin-bottom: 1rem;"></i>
+                    <p>Pilih template untuk melihat preview</p>
+                </div>
+            `;
+
+        // Clear inputs
+        document.getElementById("eventTitle").value = "";
+        document.getElementById("eventSubtitle").value = "";
+        document.getElementById("eventDate").value = "";
+        document.getElementById("eventLocation").value = "";
+        document.getElementById("eventNotes").value = "";
+        document.getElementById("guestName").value = "";
+        document.getElementById("manualNameList").innerHTML = "";
+        document.getElementById("excelNameList").innerHTML = "";
+        document.getElementById("excelNameList").style.display = "none";
+      }
+
+      function updatePreview() {
+        if (!currentTemplate) return;
+
+        // Ambil nama tamu pertama untuk preview, atau default text
+        let displayGuestName = "Kepada Yth. Guest Name";
+
+        if (guestNames.length > 0) {
+          // Format nama tamu berdasarkan template
+          const firstName = guestNames[0];
+          switch (currentTemplate) {
+            case "wedding":
+            case "wedding2":
+              displayGuestName = `Kepada Yth.<br>${firstName}`;
+              break;
+            case "birthday":
+              displayGuestName = `Hello ${firstName}!`;
+              break;
+            case "corporate":
+              displayGuestName = `${firstName}`;
+              break;
+            case "interview":
+              displayGuestName = `Dear ${firstName}`;
+              break;
+            case "event":
+              displayGuestName = `${firstName}`;
+              break;
+            default:
+              displayGuestName = firstName;
+          }
+        }
+
+        const data = {
+          title: document.getElementById("eventTitle").value,
+          subtitle: document.getElementById("eventSubtitle").value,
+          date: document.getElementById("eventDate").value,
+          location: document.getElementById("eventLocation").value,
+          notes: document.getElementById("eventNotes").value,
+          guestName: displayGuestName,
+        };
+
+        const template = templates[currentTemplate];
+        const preview = document.getElementById("invitationPreview");
+
+        preview.className = "invitation-preview " + template.class;
+        preview.innerHTML = template.html(data);
+      }
+
+      function switchTab(tab) {
+        // Update buttons
+        document.querySelectorAll(".tab-btn").forEach((btn) => {
+          btn.classList.remove("active");
+        });
+        event.target.classList.add("active");
+
+        // Update content
+        document.querySelectorAll(".tab-content").forEach((content) => {
+          content.classList.remove("active");
+        });
+
+        if (tab === "manual") {
+          document.getElementById("manualTab").classList.add("active");
+        } else {
+          document.getElementById("excelTab").classList.add("active");
+        }
+      }
+
+      function handleManualInput(event) {
+        if (event.key === "Enter") {
+          const input = document.getElementById("guestName");
+          const name = input.value.trim();
+
+          if (name) {
+            guestNames.push(name);
+            updateNameList();
+            input.value = "";
+            updatePreview(); // Update preview dengan nama baru
+            showSuccess(`"${name}" ditambahkan! (${guestNames.length} tamu)`);
+          }
+        }
+      }
+
+      function updateNameList() {
+        const listContainer = document.getElementById("manualNameList");
+        if (guestNames.length === 0) {
+          listContainer.innerHTML =
+            '<p style="color: #94a3b8; text-align: center; font-size: 0.9rem;">Belum ada nama tamu. Tambahkan nama untuk melihat di preview.</p>';
+          return;
+        }
+
+        listContainer.innerHTML = guestNames
+          .map(
+            (name, index) => `
+                <div class="name-item">
+                    <span>${index + 1}. ${name}</span>
+                    <button onclick="removeName(${index})">Hapus</button>
+                </div>
+            `,
+          )
+          .join("");
+      }
+
+      function removeName(index) {
+        const removedName = guestNames[index];
+        guestNames.splice(index, 1);
+        updateNameList();
+        updatePreview(); // Update preview setelah hapus nama
+        showSuccess(`"${removedName}" dihapus`);
+      }
+
+      function handleFileUpload(event) {
+        const file = event.target.files[0];
+        if (!file) return;
+
+        const reader = new FileReader();
+        reader.onload = function (e) {
+          const data = new Uint8Array(e.target.result);
+          const workbook = XLSX.read(data, { type: "array" });
+
+          // Get first sheet
+          const firstSheet = workbook.Sheets[workbook.SheetNames[0]];
+
+          // Convert to JSON
+          const jsonData = XLSX.utils.sheet_to_json(firstSheet, { header: 1 });
+
+          // Extract names from first column
+          const newNames = jsonData
+            .map((row) => row[0])
+            .filter((name) => name && name.toString().trim() !== "");
+
+          guestNames = [...guestNames, ...newNames];
+
+          // Update UI
+          const listContainer = document.getElementById("excelNameList");
+          listContainer.style.display = "block";
+          updateExcelNameList();
+
+          // Update preview dengan nama pertama dari Excel
+          updatePreview();
+
+          showSuccess(
+            `${newNames.length} nama berhasil diimport dari Excel! Total: ${guestNames.length} tamu`,
+          );
+        };
+
+        reader.readAsArrayBuffer(file);
+      }
+
+      function updateExcelNameList() {
+        const listContainer = document.getElementById("excelNameList");
+        if (guestNames.length === 0) {
+          listContainer.innerHTML =
+            '<p style="color: #94a3b8; text-align: center; font-size: 0.9rem;">Belum ada nama dari Excel</p>';
+          return;
+        }
+
+        listContainer.innerHTML = guestNames
+          .map(
+            (name, index) => `
+                <div class="name-item">
+                    <span>${index + 1}. ${name}</span>
+                    <button onclick="removeName(${index})">Hapus</button>
+                </div>
+            `,
+          )
+          .join("");
+      }
+
+      function generateInvitations() {
+        if (!currentTemplate) {
+          alert("Silakan pilih template terlebih dahulu!");
+          return;
+        }
+
+        if (guestNames.length === 0) {
+          alert("Silakan tambahkan nama tamu terlebih dahulu!");
+          return;
+        }
+
+        document.getElementById("loading").classList.add("active");
+
+        // Simulate generation process
+        setTimeout(() => {
+          document.getElementById("loading").classList.remove("active");
+
+          // Create modal with all invitations
+          showGeneratedInvitations();
+        }, 1500);
+      }
+
+      function showGeneratedInvitations() {
+        // Remove existing modal if any
+        const existingModal = document.getElementById("generatedModal");
+        if (existingModal) existingModal.remove();
+
+        const modal = document.createElement("div");
+        modal.className = "modal active";
+        modal.id = "generatedModal";
+
+        const data = {
+          title: document.getElementById("eventTitle").value || "Event Title",
+          subtitle:
+            document.getElementById("eventSubtitle").value || "Subtitle",
+          date: document.getElementById("eventDate").value || "Event Date",
+          location:
+            document.getElementById("eventLocation").value || "Location",
+          notes:
+            document.getElementById("eventNotes").value || "Additional Notes",
+        };
+
+        const template = templates[currentTemplate];
+
+        let invitationsHTML = guestNames
+          .map((name, index) => {
+            // Format nama tamu untuk setiap undangan
+            let formattedName = name;
+            switch (currentTemplate) {
+              case "wedding":
+              case "wedding2":
+                formattedName = `Kepada Yth.<br>${name}`;
+                break;
+              case "birthday":
+                formattedName = `Hello ${name}!`;
+                break;
+              case "corporate":
+                formattedName = `${name}`;
+                break;
+              case "interview":
+                formattedName = `Dear ${name}`;
+                break;
+              case "event":
+                formattedName = `${name}`;
+                break;
+            }
+
+            return `
+                <div style="margin-bottom: 3rem; page-break-inside: avoid; border: 2px solid #e2e8f0; border-radius: 15px; overflow: hidden;">
+                    <div class="invitation-preview ${template.class}" style="box-shadow: none; margin: 0; max-width: 100%;">
+                        ${template.html({ ...data, guestName: formattedName })}
+                    </div>
+                    <div style="padding: 1rem; background: #f8fafc; text-align: center; border-top: 1px solid #e2e8f0;">
+                        <small style="color: #64748b;">Undangan #${index + 1} untuk ${name}</small>
+                    </div>
+                </div>
+            `;
+          })
+          .join("");
+
+        modal.innerHTML = `
+                <div class="modal-content" style="max-width: 600px;">
+                    <button class="close-modal" onclick="closeModal()">
+                        <i class="fas fa-times"></i>
+                    </button>
+                    <h2 style="margin-bottom: 1rem; color: var(--dark);">
+                        <i class="fas fa-check-circle" style="color: #10b981;"></i>
+                        Undangan Berhasil Dibuat!
+                    </h2>
+                    <p style="margin-bottom: 1.5rem; color: #64748b;">
+                        Total <strong>${guestNames.length}</strong> undangan untuk "${data.title}"
+                    </p>
+                    <div style="max-height: 60vh; overflow-y: auto; padding: 1rem; background: #f1f5f9; border-radius: 10px;">
+                        ${invitationsHTML}
+                    </div>
+                    <div style="margin-top: 1.5rem; display: flex; gap: 1rem;">
+                        <button class="btn-primary" onclick="downloadPDF()" style="flex: 1;">
+                            <i class="fas fa-download"></i> Download PDF
+                        </button>
+                        <button class="btn-secondary" onclick="closeModal()" style="flex: 1;">
+                            Tutup
+                        </button>
+                    </div>
+                </div>
+            `;
+
+        document.body.appendChild(modal);
+        document.body.style.overflow = "hidden";
+      }
+
+      function closeModal() {
+        const modal = document.getElementById("generatedModal");
+        if (modal) {
+          modal.remove();
+          document.body.style.overflow = "auto";
+        }
+      }
+
+      function downloadPDF() {
+        showSuccess("Fitur download PDF akan segera hadir! (Coming Soon)");
+      }
+
+      function showPrivacy() {
+        alert(
+          "Kebijakan Privasi:\n\nKami menghargai privasi Anda. Data yang Anda upload tidak disimpan di server kami dan hanya diproses di browser Anda.",
+        );
+      }
+
+      function showTerms() {
+        alert(
+          "Syarat & Ketentuan:\n\n1. Platform ini gratis untuk penggunaan pribadi\n2. Tidak menyalahgunakan template untuk konten ilegal\n3. Hak cipta template tetap milik UndangKita",
+        );
+      }
+
+      function showSuccess(message) {
+        const successDiv = document.getElementById("successMessage");
+        successDiv.innerHTML = `<i class="fas fa-check-circle"></i> ${message}`;
+        successDiv.classList.add("show");
+
+        setTimeout(() => {
+          successDiv.classList.remove("show");
+        }, 3000);
+      }
+
+      // Scroll spy untuk update active nav
+      window.addEventListener("scroll", () => {
+        const sections = ["home", "templates", "features", "contact"];
+        const scrollPosition = window.scrollY + 100;
+
+        sections.forEach((section) => {
+          const element = document.getElementById(section);
+          if (element) {
+            const offsetTop = element.offsetTop;
+            const offsetHeight = element.offsetHeight;
+
+            if (
+              scrollPosition >= offsetTop &&
+              scrollPosition < offsetTop + offsetHeight
+            ) {
+              updateActiveNav(section);
+            }
+          }
+        });
+      });
+
+      // Initialize
+      window.onload = function () {
+        updateNameList();
+
+        // Close modal on escape key
+        document.addEventListener("keydown", (e) => {
+          if (e.key === "Escape") closeModal();
+        });
+      };
+    </script>
+  </body>
+</html>
